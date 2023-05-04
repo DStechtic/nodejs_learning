@@ -57,8 +57,27 @@ class UserController {
   static async deleteUser(req, res) {
     try {
       var index = userData.findIndex((obj) => obj.id == req.params.id);
-      userData.splice(index,1)
+      userData.splice(index, 1);
       util.setSuccess(200, "User Data!", userData);
+      return util.send(res);
+    } catch {
+      util.setError(400, error);
+      return util.send(res);
+    }
+  }
+  static async uploadFiles(req, res) {
+    try {
+      util.setSuccess(200, "Files uploaded successfully!!", userData);
+      return util.send(res);
+    } catch {
+      util.setError(400, error);
+      return util.send(res);
+    }
+  }
+  static async profile(req, res) {
+    try {
+      
+      util.setSuccess(200, "Profile uploaded successfully!!", userData);
       return util.send(res);
     } catch {
       util.setError(400, error);
