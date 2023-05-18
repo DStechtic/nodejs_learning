@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const app = express();
 const userRoutes = require("./server/routes/userRoutes");
 const port=3000;
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/v1/user',userRoutes)

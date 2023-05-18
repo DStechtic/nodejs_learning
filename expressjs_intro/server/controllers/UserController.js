@@ -1,17 +1,42 @@
 const Util = require("../Utils");
 const util = new Util();
 
+var fs = require("fs");
 const userData = [
   { name: "Jack", age: 25, id: 1 },
   { name: "Mary", age: 22, id: 2 },
   { name: "Neon", age: 24, id: 3 },
   { name: "Den", age: 25, id: 4 },
 ];
-
+async function userSearch(value) {
+  if (value) {
+    return userData.filter((item) => {
+      return value
+        .toLowerCase()
+        .split(" ")
+        .every((v) => item.name.toLowerCase().includes(v));
+    });
+  } else {
+    return userData;
+  }
+}
 class UserController {
   static async userList(req, res) {
     try {
-      util.setSuccess(200, "User Data!", userData);
+      const searchData = await userSearch(req.query.search);
+      fs.writeFile(
+        "user.json",
+        JSON.stringify(userData),
+        "utf8",
+        function (err) {
+          if (err) throw err;
+          console.log("Data written successfully!");
+        }
+      );
+      
+      searchData.length <= 0
+        ? util.setSuccess(200, "User Not found")
+        : util.setSuccess(200, "User get successfully", searchData);
       return util.send(res);
     } catch {
       util.setError(400, error);
@@ -76,7 +101,6 @@ class UserController {
   }
   static async profile(req, res) {
     try {
-      
       util.setSuccess(200, "Profile uploaded successfully!!", userData);
       return util.send(res);
     } catch {
